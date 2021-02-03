@@ -20,8 +20,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ServicioServiceImp implements ServicioService {
-
-	private Logger log = LoggerFactory.getLogger(ServicioServiceImp.class);
 	
     @Autowired
     protected ServicioRepository servicioRepository;
@@ -47,6 +45,7 @@ public class ServicioServiceImp implements ServicioService {
             return "Servicio eliminado correctamente.";
         }
         return "Error! El Servicio no existe";
+        
 
     }
 
@@ -68,5 +67,10 @@ public class ServicioServiceImp implements ServicioService {
         Optional<Servicio> servicio = servicioRepository.findById(id);
         return servicio;
     }
+
+	@Override
+	public boolean existeIdServicio(String idServicio) {
+		return this.servicioRepository.existsByIdServicio(idServicio);
+	}
 
 }

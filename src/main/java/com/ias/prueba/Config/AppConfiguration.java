@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
 import com.ias.prueba.Repository.ServicioRepository;
+import com.ias.prueba.Service.CalculoService;
+import com.ias.prueba.Service.CalculoServiceImp;
 import com.ias.prueba.Service.ServicioService;
 import com.ias.prueba.Service.ServicioServiceImp;
 
@@ -24,10 +26,15 @@ import com.ias.prueba.Service.ServicioServiceImp;
 public class AppConfiguration {
 
 	@Bean
-	//@Primary
 	@Qualifier("reporteServiceConfiguration")
 	public ServicioService reporteServiceConfiguration() {
 		return new ServicioServiceImp(); 
+	}
+	
+	@Bean
+	@Qualifier("calculoServiceConfiguration")
+	public CalculoService calculoServiceConfiguration() {
+		return new CalculoServiceImp(); 
 	}
 	
 }

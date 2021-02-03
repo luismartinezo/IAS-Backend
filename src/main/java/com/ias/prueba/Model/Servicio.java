@@ -3,6 +3,8 @@
  */
 package com.ias.prueba.Model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,22 +39,13 @@ public class Servicio {
     private String idTecnico;
 
     @Column
-    private String fechaInicio;
+    private Date fechaInicio;
 
     @Column
-    private String fechaFin;
+    private Date fechaFin;
+    
+    private int numSemana;
 
-//	public Servicio(Long id, String nombre, String descripcion, String idServicio, String idTecnico, String fechaInicio,
-//			String fechaFin) {
-//		super();
-//		this.id = id;
-//		this.nombre = nombre;
-//		this.descripcion = descripcion;
-//		this.idServicio = idServicio;
-//		this.idTecnico = idTecnico;
-//		this.fechaInicio = fechaInicio;
-//		this.fechaFin = fechaFin;
-//	}
 
 	public Long getId() {
 		return id;
@@ -94,20 +87,29 @@ public class Servicio {
 		this.idTecnico = idTecnico;
 	}
 
-	public String getFechaInicio() {
+	public Date getFechaInicio() {
 		return fechaInicio;
 	}
 
-	public void setFechaInicio(String fechaInicio) {
+	public void setFechaInicio(Date fechaInicio) {
 		this.fechaInicio = fechaInicio;
 	}
 
-	public String getFechaFin() {
+	public Date getFechaFin() {
 		return fechaFin;
 	}
 
-	public void setFechaFin(String fechaFin) {
+	public void setFechaFin(Date fechaFin) {
 		this.fechaFin = fechaFin;
 	}
 
+	public int getNumSemana() {
+		return numSemana;
+	}
+
+	public void setNumSemana(int numSemana) {
+		this.numSemana = numSemana;
+	}
+
+	
 }

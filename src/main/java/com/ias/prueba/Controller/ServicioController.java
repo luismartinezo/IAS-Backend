@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ias.prueba.Excepciones.IasExcepcion;
 import com.ias.prueba.Model.Servicio;
 import com.ias.prueba.Service.ServicioService;
 // import com.prueba.Util.queryResult;
@@ -36,21 +37,32 @@ public class ServicioController {
 
     // Nuevo Servicio
     @PostMapping("/nuevo")
-    public restResponse save(@RequestBody String reporteJson) throws JsonMappingException, JsonProcessingException {
+    public restResponse save(@RequestBody String reporteJson) throws JsonMappingException, JsonProcessingException, IasExcepcion {
         this.mapper = new ObjectMapper();
         Servicio servicio = this.mapper.readValue(reporteJson, Servicio.class);
+        
+        this.validator(servicio);
+        
         if (!this.validate(servicio)) {
             return new restResponse(HttpStatus.NOT_ACCEPTABLE.value(), "Campo obligatorio sin diligenciar");
         }
+        if (servicioService.existeIdServicio(servicio.getIdServicio())) {
+            return new restResponse(HttpStatus.NOT_FOUND.value(), "El numero de Servicio ya existe");
+        }
+
         this.servicioService.save(servicio);
         return new restResponse(HttpStatus.OK.value(), "Reporte de Servicio guardado con exito");
     }
 
     // Actualizar Servicio
     @PostMapping("/actualizar")
-    public restResponse update(@RequestBody String reporteJson) throws JsonMappingException, JsonProcessingException {
+    public restResponse update(@RequestBody String reporteJson) throws JsonMappingException, JsonProcessingException, IasExcepcion {
         this.mapper = new ObjectMapper();
+        
         Servicio servicio = this.mapper.readValue(reporteJson, Servicio.class);
+        
+        this.validator(servicio);
+        
         if (!servicioService.existeId(servicio.getId())) {
             return new restResponse(HttpStatus.NOT_FOUND.value(), "No existe el reporte del servicio en la base de datos");
         }
@@ -76,7 +88,7 @@ public class ServicioController {
     }
 
     // Detalles Servicio
-    @RequestMapping(value = "/detalle/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/detalle/{idTecnico}", method = RequestMethod.GET)
     public Optional<Servicio> detail(@PathVariable Long id) {
         return servicioService.detail(id);
     }
@@ -84,6 +96,7 @@ public class ServicioController {
     // Validaciones
     private boolean validate(Servicio servicio) {
         boolean isValid = true;
+        
         if (servicio.getNombre() == null || servicio.getNombre() == "") {
             isValid = false;
         }
@@ -93,12 +106,20 @@ public class ServicioController {
         if (servicio.getIdTecnico() == null || servicio.getIdTecnico() == "") {
             isValid = false;
         }
-        if (servicio.getFechaInicio() == null || servicio.getFechaInicio() == "") {
+        if (servicio.getFechaInicio() == null || servicio.getFechaFin() == null) {
             isValid = false;
         }
-        if (servicio.getFechaFin() == null || servicio.getFechaFin() == "") {
-            isValid = false;
-        }
+        
         return isValid;
+    }
+    
+    public void validator(Servicio servicio) throws IasExcepcion {
+		if(servicio.getFechaInicio().after(servicio.getFechaFin())) {
+			message("La fecha de inicio debe ser menor que la fecha de fin");
+		}
+		
+	}
+    private void message(String mensaje) throws IasExcepcion {
+    	throw new IasExcepcion(mensaje);
     }
 }

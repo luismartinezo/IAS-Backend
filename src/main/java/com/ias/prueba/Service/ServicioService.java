@@ -13,7 +13,6 @@ import com.ias.prueba.Model.Servicio;
  * @version 1.0
  */
 
-// @Service
 public interface ServicioService {
 
     // Guardar Servicio
@@ -30,6 +29,9 @@ public interface ServicioService {
 
     // Verificar la existencia del id
     boolean existeId(Long id);
+    
+ // Verificar la existencia del idServicio
+    boolean existeIdServicio(String idServicio);
 
     // Detalles del servicio por id
     Optional<Servicio> detail(Long id);
